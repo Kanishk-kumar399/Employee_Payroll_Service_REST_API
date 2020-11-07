@@ -22,6 +22,7 @@ public class EmployeePayrollRestAPITest
 		RestAssured.baseURI="http://localhost";
 		RestAssured.port=3000;
 	}
+	
 	public EmployeePayrollData[] getEmployeeList()
 	{
 		Response response=RestAssured.get("/employees");
@@ -29,6 +30,7 @@ public class EmployeePayrollRestAPITest
 		EmployeePayrollData[] arrayOfEmployees=new Gson().fromJson(response.asString(),EmployeePayrollData[].class);
 		return arrayOfEmployees;
 	}
+	//UC4
     @Test
     public void givenEmployeeDataInJSONServer_WhenRetrieved_ShouldMatchTheCount()
     {
@@ -36,8 +38,9 @@ public class EmployeePayrollRestAPITest
         EmployeePayrollREST_IOService employeePayrollREST_IOService;
         employeePayrollREST_IOService=new EmployeePayrollREST_IOService(Arrays.asList(arrayOfEmployees));
         long entries=employeePayrollREST_IOService.countREST_IOEntries();
-        Assert.assertEquals(2,entries);
+        Assert.assertEquals(7,entries);
     }
+    //uc1
     @Test
     public void givenNewEmployeeWhenAddedShouldMatch201ResponseAndcount()
     {
@@ -60,6 +63,7 @@ public class EmployeePayrollRestAPITest
 		request.body(employeeJson);
 		return request.post("/employees");
 	}
+    //uc2
     @Test
     public void givenMultipleEmployees_WhenAdded_ShouldMatch210ResponseAndCount()
     {
@@ -82,6 +86,7 @@ public class EmployeePayrollRestAPITest
     	long entries=employeePayrollService.countREST_IOEntries();
     	Assert.assertEquals(7,entries);
     }
+    //uc3
     @Test
     public void givenNewSalaryForAnyEmployee_WhenUpdated_ShouldMatch200Response()
     {
