@@ -144,4 +144,8 @@ private List<EmployeePayrollData> employeePayrollList;
 		if(employeePayrollData!=null)
 			employeePayrollData.setSalary(salary);
 	}
+	public void deleteEmployeePayroll_UsingRest_IO(String name) {
+		EmployeePayrollData employeePayrollData=this.getEmployeePayrollData(name);
+		employeePayrollList.remove(employeePayrollData);
+	}
 }
