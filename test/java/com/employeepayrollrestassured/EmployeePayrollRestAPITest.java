@@ -60,4 +60,42 @@ public class EmployeePayrollRestAPITest
 		request.body(employeeJson);
 		return request.post("/employees");
 	}
+    @Test
+    public void givenMultipleEmployees_WhenAdded_ShouldMatch210ResponseAndCount()
+    {
+    	EmployeePayrollService employeePayrollService;
+    	EmployeePayrollData[] arrayOfEmployees=getEmployeeList();
+    	employeePayrollService=new EmployeePayrollService(Arrays.asList(arrayOfEmployees));
+    	EmployeePayrollData[] arrayOfEmployeePayroll= {
+    			new EmployeePayrollData(5,"Ms Dhoni",7777737.0),
+    			new EmployeePayrollData(6,"Sanjay Singhaniya",6265777.0),
+    			new EmployeePayrollData(7,"Ronaldo Singh",9777777.0)
+    	};
+    	for(EmployeePayrollData employeePayrollData:arrayOfEmployeePayroll)
+    	{
+    		Response response=addEmployeeToJsonServer(employeePayrollData);
+    		int HTTPstatusCode=response.getStatusCode();
+    		Assert.assertEquals(201,HTTPstatusCode);
+    		employeePayrollData=new Gson().fromJson(response.asString(),EmployeePayrollData.class);
+        	employeePayrollService.addEmployeeToPayrollUsingRestAPI(employeePayrollData);
+    	}
+    	long entries=employeePayrollService.countREST_IOEntries();
+    	Assert.assertEquals(7,entries);
+    }
+    @Test
+    public void givenNewSalaryForAnyEmployee_WhenUpdated_ShouldMatch200Response()
+    {
+    	EmployeePayrollService employeePayrollService;
+    	EmployeePayrollData[] arrayOfEmployees=getEmployeeList();
+    	employeePayrollService=new EmployeePayrollService(Arrays.asList(arrayOfEmployees));
+    	employeePayrollService.updateEmployeeSalaryUsingRest_IO("Abhinav",3453545.0);
+    	EmployeePayrollData employeePayrollData=employeePayrollService.getEmployeePayrollData("Abhinav");
+    	String empJson=new Gson().toJson(employeePayrollData);
+    	RequestSpecification request=RestAssured.given();
+		request.header("Content-Type","application/json");
+		request.body(empJson);
+		Response response=request.put("/employees/"+employeePayrollData.getId());
+		int statusCode=response.getStatusCode();
+		Assert.assertEquals(200, statusCode);
+    }
 }

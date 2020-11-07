@@ -139,4 +139,9 @@ private List<EmployeePayrollData> employeePayrollList;
 	public void addEmployeeToPayrollUsingRestAPI(EmployeePayrollData employeePayrollData) {
 		employeePayrollList.add(employeePayrollData);
 	}
+	public void updateEmployeeSalaryUsingRest_IO(String name, double salary) {
+		EmployeePayrollData employeePayrollData=this.getEmployeePayrollData(name);
+		if(employeePayrollData!=null)
+			employeePayrollData.setSalary(salary);
+	}
 }
