@@ -2,6 +2,7 @@ package com.employeepayrollrestassured;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,9 @@ private List<EmployeePayrollData> employeePayrollList;
 	public EmployeePayrollService() {
 		this.employeePayrollDBService = EmployeePayrollJDBCService.getInstance();
 	}
-	
+	public EmployeePayrollService(List<EmployeePayrollData> employeeList) {
+			employeePayrollList=new ArrayList<>(employeeList);
+		}
 	public List<EmployeePayrollData> readEmployeePayrollData() throws EmployeePayrollJDBCException{
 		this.employeePayrollList = this.employeePayrollDBService.readData();
 		return this.employeePayrollList;
@@ -129,5 +132,11 @@ private List<EmployeePayrollData> employeePayrollList;
 			} catch(InterruptedException e) {}
 		}
 		System.out.println(this.employeePayrollList);
+	}
+	public long countREST_IOEntries() {
+		return employeePayrollList.size();
+	}
+	public void addEmployeeToPayrollUsingRestAPI(EmployeePayrollData employeePayrollData) {
+		employeePayrollList.add(employeePayrollData);
 	}
 }
