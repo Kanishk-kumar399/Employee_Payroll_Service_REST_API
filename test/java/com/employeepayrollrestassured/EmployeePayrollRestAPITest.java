@@ -60,4 +60,26 @@ public class EmployeePayrollRestAPITest
 		request.body(employeeJson);
 		return request.post("/employees");
 	}
+    @Test
+    public void givenMultipleEmployees_WhenAdded_ShouldMatch210ResponseAndCount()
+    {
+    	EmployeePayrollService employeePayrollService;
+    	EmployeePayrollData[] arrayOfEmployees=getEmployeeList();
+    	employeePayrollService=new EmployeePayrollService(Arrays.asList(arrayOfEmployees));
+    	EmployeePayrollData[] arrayOfEmployeePayroll= {
+    			new EmployeePayrollData(5,"Ms Dhoni",7777737.0),
+    			new EmployeePayrollData(6,"Sanjay Singhaniya",6265777.0),
+    			new EmployeePayrollData(7,"Ronaldo Singh",9777777.0)
+    	};
+    	for(EmployeePayrollData employeePayrollData:arrayOfEmployeePayroll)
+    	{
+    		Response response=addEmployeeToJsonServer(employeePayrollData);
+    		int HTTPstatusCode=response.getStatusCode();
+    		Assert.assertEquals(201,HTTPstatusCode);
+    		employeePayrollData=new Gson().fromJson(response.asString(),EmployeePayrollData.class);
+        	employeePayrollService.addEmployeeToPayrollUsingRestAPI(employeePayrollData);
+    	}
+    	long entries=employeePayrollService.countREST_IOEntries();
+    	Assert.assertEquals(7,entries);
+    }
 }
